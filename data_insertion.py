@@ -26,15 +26,15 @@ for file in os.walk(FILE_DIR):
     if file[0] == FILE_DIR:
         for f in file[2]:
             if f.startswith(METEO):
-                raw_meteodata.append(pd.read_csv(os.path.join(FILE_DIR, f), sep=";"))
+                raw_meteodata.append((pd.read_csv(os.path.join(FILE_DIR, f), sep=";"), f.split(METEO)[1].split("_aveiro")[0].replace("_", " ")))
             elif f.startswith(NOISE):
-                raw_noisedata.append(pd.read_csv(os.path.join(FILE_DIR, f), sep=";"))
+                raw_noisedata.append((pd.read_csv(os.path.join(FILE_DIR, f), sep=";"), f.split(NOISE)[1].split("_aveiro")[0].replace("_", " ")))
             elif f.startswith(AIR):
-                raw_airdata.append(pd.read_csv(os.path.join(FILE_DIR, f), sep=";"))
+                raw_airdata.append((pd.read_csv(os.path.join(FILE_DIR, f), sep=";"), f.split(AIR)[1].split("_aveiro")[0].replace("_", " ")))
 
 col_units_map = {}
 for lst in [raw_meteodata, raw_noisedata, raw_airdata]:
-    for df in lst:
+    for df, city in lst:
         # Remove units
         for col in df.columns:
             if " (" in col:
@@ -47,6 +47,8 @@ for lst in [raw_meteodata, raw_noisedata, raw_airdata]:
         df["device name"].ffill(inplace=True)
         df["latitude"].ffill(inplace=True)
         df["longitude"].ffill(inplace=True)
+        # Add city
+        df["city"] = city
 
 for df in raw_airdata:
     df.set_index("timestamp", inplace=True)

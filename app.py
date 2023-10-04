@@ -8,6 +8,8 @@ import seaborn as sns
 import flask
 from flask import request, render_template
 from flask_cors import CORS
+import googlemaps
+from dotenv import load_dotenv
 
 from influxInteraction import InfluxSession, unpack
 
@@ -17,6 +19,7 @@ session = InfluxSession("sensor", "hack",
                         "eb2kn5YQql-0vgBZkaoMEBGEemvVxRjQ-fv98RX5Og3ikY2p84BEpCgWVf4kn1OY5o1YbEU5cHM7zLJKNiuX1A==",
                         "http://localhost:8086")
 sns.set_theme()
+load_dotenv(verbose=True)
 
 
 @app.route("/")
@@ -66,6 +69,16 @@ def _get_marker_locations():
     return validated_pairs
 
 
+@app.route("/get_place_photo")
+def get_place_photo():
+    # lng = request.args.get("long")
+    # lat = request.args.get("lat")
+    gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_TOKEN"))
+    photo_reference = gmaps.find_place("antiga reitoria ua", "textquery", fields=["photos"])["candidates"][0]["photos"][0]["photo_reference"]
+    url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&photo_reference={photo_reference}&key={os.getenv('GOOGLE_API_TOKEN')}"
+    return url
+
+
 @app.route("/get_locations")
 def get_locations():
     validated_pairs = _get_marker_locations()
@@ -100,7 +113,7 @@ def get_graph():
         print(key, request.form[key])
     fields = "carbon_dioxide,nitrogen_dioxide,ozone,pm_10"
     t_start = "2023-06-03T05:00:00.000Z"
-    t_end = "2023-06-15T05:45:00.000Z"
+    t_end = "2023-06-06T05:45:00.000Z"
     sensor = "5d1cb61fdf701404a1973c44_monitar"
     df = _get_data(sensor, fields, t_start, t_end)
     plot = sns.lineplot(data=df, legend="auto")
@@ -110,8 +123,6 @@ def get_graph():
         bottom=False,
         top=False,
         labelbottom=False)
-    if not os.path.exists("static"):
-        os.mkdir("static")
     tmpname = f"static/{time.time()}.png"
     plot.figure.savefig(f"{tmpname}")
     plot.figure.clear()
@@ -119,10 +130,12 @@ def get_graph():
 
 
 if __name__ == '__main__':
+    print(get_place_photo())
     # Precache the marker locations
-    _get_marker_locations()
-    print("Precached marker locations")
-    if os.path.exists("static"):
-        shutil.rmtree("static")
-    app.debug = True
-    app.run(port=9092)
+    # _get_marker_locations()
+    # print("Precached marker locations")
+    # if os.path.exists("static"):
+    #     shutil.rmtree("static")
+    # os.mkdir("static")
+    # app.debug = True
+    # app.run(port=9092)
