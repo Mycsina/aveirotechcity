@@ -1,5 +1,5 @@
 air_temperature (ºC);atmospheric_pressure (hPa);global_solar_radiation (w/m2);precipitation (mm);relative_humidity (%);ultraviolet_index (UV);wind_direction (º);wind_speed (km/h);timestamp;latitude;longitude;device name
-16,8;992,9;58,1;0;100;1;204;13,2;2023-03-08T15:10:00.000Z;40.63182;-8.64851;5ed5108c766c3f0012f064df_monitar
+16,8;992,9;58,1;0;100;1;204;13,2;2023-03-08T15:10:00.000Z;40.64645330886868;-8.643448472807865;5ed5108c766c3f0012f064df_monitar
 16,3;992,8;130,5;0;100;1;210;17,7;2023-03-08T15:15:00.000Z;;;
 16,3;992,6;107,4;0,2;100;1;208;15,7;2023-03-08T15:20:00.000Z;;;
 16,3;992,4;116,8;0;100;1;207;15,9;2023-03-08T15:25:00.000Z;;;
