@@ -100,7 +100,7 @@ def get_graph():
         print(key, request.form[key])
     fields = "carbon_dioxide,nitrogen_dioxide,ozone,pm_10"
     t_start = "2023-06-03T05:00:00.000Z"
-    t_end = "2023-07-15T05:45:00.000Z"
+    t_end = "2023-06-15T05:45:00.000Z"
     sensor = "5d1cb61fdf701404a1973c44_monitar"
     df = _get_data(sensor, fields, t_start, t_end)
     plot = sns.lineplot(data=df, legend="auto")
