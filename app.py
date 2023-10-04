@@ -26,7 +26,6 @@ load_dotenv(verbose=True)
 def index():
     # TODO: this is a hack, fix it
     marker_id = request.args.get("marker_id")
-    print(marker_id)
     lng = -8.6587
     lat = 40.6350
     if marker_id is not None:
@@ -142,8 +141,5 @@ if __name__ == '__main__':
     # Precache the marker locations
     _get_marker_locations()
     print("Precached marker locations")
-    if os.path.exists("static"):
-        shutil.rmtree("static")
-    os.mkdir("static")
     app.debug = True
     app.run(port=9092)
