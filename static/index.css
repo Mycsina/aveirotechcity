@@ -68,7 +68,7 @@ body {
     justify-content: start;
     align-items: center;
     overflow: hidden;
-    display: flex;
+    display: none;
 }
 
 #close {
@@ -132,7 +132,7 @@ body {
     justify-content: start;
     align-items: center;
     overflow: hidden;
-    display: flex;
+    display: none;
 }
 
 #graphNav {
