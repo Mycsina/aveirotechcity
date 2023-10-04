@@ -10,7 +10,7 @@ from influxInteraction import InfluxSession
 load_dotenv()
 
 session = InfluxSession("sensor", "hack",
-                        "hbxyqRw8XaDPbQb9az1RuZowZvgYBf_FO90BYiRz5PciaPbPIPYFgHZSG_KrVmfw7sdVq7p1R0DQT1yHwdGYkA==",
+                        "eb2kn5YQql-0vgBZkaoMEBGEemvVxRjQ-fv98RX5Og3ikY2p84BEpCgWVf4kn1OY5o1YbEU5cHM7zLJKNiuX1A==",
                         "http://localhost:8086")
 
 FILE_DIR = "hackathon_air_meteo_noise_csv"
