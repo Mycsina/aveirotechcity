@@ -71,10 +71,19 @@ def _get_marker_locations():
 
 @app.route("/get_place_photo")
 def get_place_photo():
-    # lng = request.args.get("long")
-    # lat = request.args.get("lat")
+    lng = request.args.get("long")
+    lat = request.args.get("lat")
+    query = f"""
+    from(bucket: "{session.bucket}")
+        |> range(start: -45d, stop: -44d)
+        |> filter(fn: (r) => r["longitude"] == "{lng}")
+        |> filter(fn: (r) => r["latitude"] == "{lat}")
+        |> top(n: 1)
+    """
+    results = session.query(query)
+    place = list(unpack(results, "city"))[0]
     gmaps = googlemaps.Client(key=os.getenv("GOOGLE_API_TOKEN"))
-    photo_reference = gmaps.find_place("antiga reitoria ua", "textquery", fields=["photos"])["candidates"][0]["photos"][0]["photo_reference"]
+    photo_reference = gmaps.find_place(place, "textquery", fields=["photos"])["candidates"][0]["photos"][0]["photo_reference"]
     url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&photo_reference={photo_reference}&key={os.getenv('GOOGLE_API_TOKEN')}"
     return url
 
@@ -130,12 +139,11 @@ def get_graph():
 
 
 if __name__ == '__main__':
-    print(get_place_photo())
     # Precache the marker locations
-    # _get_marker_locations()
-    # print("Precached marker locations")
-    # if os.path.exists("static"):
-    #     shutil.rmtree("static")
-    # os.mkdir("static")
-    # app.debug = True
-    # app.run(port=9092)
+    _get_marker_locations()
+    print("Precached marker locations")
+    if os.path.exists("static"):
+        shutil.rmtree("static")
+    os.mkdir("static")
+    app.debug = True
+    app.run(port=9092)
